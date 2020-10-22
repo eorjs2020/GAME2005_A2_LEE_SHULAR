@@ -31,6 +31,9 @@ void PlayScene::draw()
 void PlayScene::update()
 {
 	updateDisplayList();
+	//m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle()* 180/3.14f);
+	//m_pPlayer->setDstXY(m_pPlaneSprite->getPositionPA());
+	
 }
 
 void PlayScene::clean()
@@ -178,7 +181,7 @@ void PlayScene::start()
 
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");
-	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
+	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 10.0f);
 
 	addChild(m_pInstructionsLabel);
 }
@@ -201,13 +204,13 @@ void PlayScene::GUI_Function() const
 	ImGui::Separator();
 
 	static float base =100.0f;
-	if(ImGui::SliderFloat("Ramp Base", &base, 50, 500))
+	if(ImGui::SliderFloat("Ramp Base", &base, 50, 300))
 	{
 		m_pPlaneSprite->setTriBase(base);
 	}
 
 	static float height = 100.0f;
-	if (ImGui::SliderFloat("Ramp Height", &height, 50, 500))
+	if (ImGui::SliderFloat("Ramp Height", &height, 50, 300))
 	{
 		m_pPlaneSprite->setTriHeight(height);
 	}

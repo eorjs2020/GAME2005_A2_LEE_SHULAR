@@ -53,7 +53,8 @@ void Plane::update()
 	pointB = glm::vec2{ base, posA };
 	pointC = glm::vec2{ posB, height };
 	hypotenuse = Util::distance(pointB, pointC);
-	angle = asin(Util::distance(pointA, pointB) / hypotenuse);
+	angle = asin(Util::distance(pointA, pointC) / hypotenuse);
+	angle = atan(Util::distance(pointA, pointC) / Util::distance(pointA, pointB));
 	
 }
 
