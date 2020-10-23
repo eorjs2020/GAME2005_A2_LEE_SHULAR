@@ -10,6 +10,7 @@
 PlayScene::PlayScene()
 {
 	PlayScene::start();
+
 }
 
 PlayScene::~PlayScene()
@@ -30,9 +31,16 @@ void PlayScene::draw()
 
 void PlayScene::update()
 {
+	const int xOffset = m_pPlayer->dst.w * 0.5;
+	const int yOffset = m_pPlayer->dst.h * 0.5;
 	updateDisplayList();
-	//m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle()* 180/3.14f);
-	//m_pPlayer->setDstXY(m_pPlaneSprite->getPositionPA());
+
+	
+	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f);
+	m_pPlayer->setDstXY(m_pPlaneSprite->getPositionPA());
+
+	
+	std::cout << cos(30 *  3.14159265359f/ 180) << std::endl;
 	
 }
 
@@ -137,7 +145,7 @@ void PlayScene::start()
 	m_pPlayer = new Player();
 	addChild(m_pPlayer);
 	m_playerFacingRight = true;
-
+	
 	//// Back Button
 	//m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
 	//m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);
@@ -207,12 +215,18 @@ void PlayScene::GUI_Function() const
 	if(ImGui::SliderFloat("Ramp Base", &base, 50, 300))
 	{
 		m_pPlaneSprite->setTriBase(base);
+	
+		
+	
 	}
 
 	static float height = 100.0f;
 	if (ImGui::SliderFloat("Ramp Height", &height, 50, 300))
 	{
 		m_pPlaneSprite->setTriHeight(height);
+	
+		
+	
 	}
 	ImGui::End();
 

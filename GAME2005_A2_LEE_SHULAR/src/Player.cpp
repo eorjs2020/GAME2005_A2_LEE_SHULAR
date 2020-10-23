@@ -4,7 +4,7 @@
 
 Player::Player(): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 {
-	TextureManager::Instance()->load("../Assets/textures/RTS_Crate.png", "box");
+	TextureManager::Instance()->load("../Assets/textures/rts_crate_small.png", "box");
 	src.x = 0;
 	src.y = 0;
 	src.w = 512;
@@ -27,14 +27,9 @@ Player::~Player()
 
 void Player::draw()
 {
-	const int xOffset = dst.w * 0.5;
-	const int yOffset = dst.h * 0.5;
-	dst.x = dst.x - xOffset;
-	dst.y = dst.y - yOffset;
-	
-	
+	TextureManager::Instance()->draw("box", dst.x, dst.y, angle, 255, true);
 	//SDL_RenderCopyEx(Renderer::Instance()->getRenderer(), m_textureMap[id].get(), &srcRect, &destRect, angle, nullptr, flip);
-	SDL_RenderCopyExF(Renderer::Instance()->getRenderer(),TextureManager::Instance()->getTexture("box"), &src, &dst, angle , nullptr, SDL_FLIP_NONE);
+	//SDL_RenderCopyExF(Renderer::Instance()->getRenderer(),TextureManager::Instance()->getTexture("box"), &src, &dst, angle , nullptr, SDL_FLIP_NONE);
 }
 
 void Player::update()

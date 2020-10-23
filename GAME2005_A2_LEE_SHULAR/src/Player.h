@@ -16,7 +16,8 @@ public:
 	virtual void update() override;
 	virtual void clean() override;
 	void setAngle(float angle) { this->angle = angle; }
-	void setDstXY(glm::vec2 position) { dst.x = position.x +dst.w/2; dst.y = position.y - 15;  }
+	void setDstXY(glm::vec2 position) { dst.x = position.x + (float)(cos(angle * 3.14159265359f / 180) *20); 
+	dst.y = position.y - (float)(sin(angle * 3.14159265359f / 180) * 20);  }
 
 	// setters
 	void setAnimationState(PlayerAnimationState new_state);
