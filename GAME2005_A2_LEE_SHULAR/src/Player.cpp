@@ -13,12 +13,14 @@ Player::Player(): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 	dst.y = 0;
 	dst.w = 40;
 	dst.h = 40;
-
+	setWidth(20);
+	setHeight(20);
 	getTransform()->position = glm::vec2(400.0f, 300.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(PLAYER);
+	
 
 }
 
@@ -27,14 +29,20 @@ Player::~Player()
 
 void Player::draw()
 {
-	TextureManager::Instance()->draw("box", dst.x, dst.y, angle, 255, true);
+	const auto x = getTransform()->position.x;
+	const auto y = getTransform()->position.y;
+
+	TextureManager::Instance()->draw("box", x, y, angle, 255, true, SDL_FLIP_NONE, 40, 40);
 	//SDL_RenderCopyEx(Renderer::Instance()->getRenderer(), m_textureMap[id].get(), &srcRect, &destRect, angle, nullptr, flip);
 	//SDL_RenderCopyExF(Renderer::Instance()->getRenderer(),TextureManager::Instance()->getTexture("box"), &src, &dst, angle , nullptr, SDL_FLIP_NONE);
 }
 
 void Player::update()
 {
-	
+	if (start)
+	{
+
+	}
 }
 
 void Player::clean()

@@ -31,17 +31,15 @@ void PlayScene::draw()
 
 void PlayScene::update()
 {
-	const int xOffset = m_pPlayer->dst.w * 0.5;
-	const int yOffset = m_pPlayer->dst.h * 0.5;
+
 	updateDisplayList();
 
-	
-	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
-	m_pPlayer->setDstXY(m_pPlaneSprite->getPositionPA());
 
-	
-	std::cout << cos(30 *  3.14159265359f/ 180) << std::endl;
-	
+	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
+	m_pPlayer->getTransform()->position = glm::vec2(m_pPlaneSprite->getPositionPA().x + (cos(m_pPlaneSprite->getTriAngle2()) *20 ),
+		m_pPlaneSprite->getPositionPA().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20));
+	std::cout << m_pPlayer->getTransform()->position.x << "   " << m_pPlayer->getTransform()->position.y << std::endl;
+
 }
 
 void PlayScene::clean()
@@ -73,7 +71,8 @@ void PlayScene::handleEvents()
 			{
 				if (m_playerFacingRight)
 				{
-					m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
+					
+					//m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
 				}
 				else
 				{
@@ -94,6 +93,7 @@ void PlayScene::handleEvents()
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 		{
+			m_pPlayer->PixelPerMeter(0.5f);
 			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 			m_playerFacingRight = true;
 		}
@@ -147,6 +147,8 @@ void PlayScene::start()
 	// Plane Sprite
 	m_pPlaneSprite = new Plane();
 	addChild(m_pPlaneSprite);
+
+	
 	//// Back Button
 	//m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
 	//m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);
@@ -212,21 +214,21 @@ void PlayScene::GUI_Function() const
 
 	ImGui::Separator();
 
-	static float base =100.0f;
-	if(ImGui::SliderFloat("Ramp Base", &base, 50, 300))
+	static float base =1.0f;
+	if(ImGui::SliderFloat("Ramp Base", &base, 1, 5))
 	{
-		m_pPlaneSprite->setTriBase(base);
-	
-		
+		m_pPlaneSprite->setTriBase(base * 50);
+
+			
 	
 	}
 
-	static float height = 100.0f;
-	if (ImGui::SliderFloat("Ramp Height", &height, 50, 300))
+	static float height = 1.0f;
+	if (ImGui::SliderFloat("Ramp Height", &height, 1, 10))
 	{
-		m_pPlaneSprite->setTriHeight(height);
+		m_pPlaneSprite->setTriHeight(height* 50);
 	
-		
+	
 	
 	}
 	ImGui::End();

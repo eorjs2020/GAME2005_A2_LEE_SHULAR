@@ -118,7 +118,7 @@ bool TextureManager::loadSpriteSheet(
 	return true;
 }
 
-void TextureManager::draw(const std::string& id, const int x, const int y, const double angle, const int alpha, const bool centered, const SDL_RendererFlip flip)
+void TextureManager::draw(const std::string& id, const int x, const int y, const double angle, const int alpha, const bool centered, const SDL_RendererFlip flip, int w, int h)
 {
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
@@ -130,12 +130,22 @@ void TextureManager::draw(const std::string& id, const int x, const int y, const
 
 	SDL_QueryTexture(m_textureMap[id].get(), nullptr, nullptr, &textureWidth, &textureHeight);
 
-	srcRect.w = destRect.w = textureWidth;
-	srcRect.h = destRect.h = textureHeight;
-
+	srcRect.w = textureWidth;
+	srcRect.h =  textureHeight;
+	if (w == 0)
+	{
+		destRect.w = textureWidth;
+		destRect.h = textureHeight;
+	}
+	else
+	{
+		destRect.w = w;
+		destRect.h = h;
+	}
+	
 	if (centered) {
-		const int xOffset = textureWidth * 0.5;
-		const int yOffset = textureHeight * 0.5;
+		const int xOffset = destRect.w * 0.5;
+		const int yOffset = destRect.h * 0.5;
 		destRect.x = x - xOffset;
 		destRect.y = y - yOffset;
 	}
