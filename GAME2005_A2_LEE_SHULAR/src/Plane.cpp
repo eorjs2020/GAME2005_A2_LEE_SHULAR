@@ -1,5 +1,7 @@
 #include "Plane.h"
 #include "TextureManager.h"
+#include "Util.h"
+
 
 Plane::Plane()
 {
@@ -34,18 +36,66 @@ void Plane::draw()
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	// draw the plane sprite with simple propeller animation
-	TextureManager::Instance()->playAnimation(
-		"spritesheet", getAnimation("plane"),
-		x, y, 0.5f, 0, 255, true);
+	//// draw the plane sprite with simple propeller animation
+	//TextureManager::Instance()->playAnimation(
+	//	"spritesheet", getAnimation("plane"),
+	//	x, y, 0.5f, 0, 255, true);
+
+	Util::DrawLine(pointA, pointB, color);
+	Util::DrawLine(pointA, pointC, color);
+	Util::DrawLine(pointC, pointB, color);
+
 }
 
 void Plane::update()
 {
+	pointA = glm::vec2{ posB, posA };
+	pointB = glm::vec2{ base, posA };
+	pointC = glm::vec2{ posB, height };
+	hypotenuse = Util::distance(pointB, pointC);
+	angle = asin(Util::distance(pointA, pointC) / hypotenuse);
+	angle = atan(Util::distance(pointA, pointC) / Util::distance(pointA, pointB));
+	angle2 = asin(Util::distance(pointA, pointB) / hypotenuse);
 }
+
 
 void Plane::clean()
 {
+}
+
+float Plane::getTriHeight()
+{
+	return height;
+}
+
+float Plane::getTriBase()
+{
+	return base;
+}
+
+float Plane::getTriAngle()
+{
+	return angle;
+}
+
+float Plane::getTriAngle2()
+{
+	return angle2;
+}
+
+float Plane::getTriHypotenuse()
+{
+	return hypotenuse;
+}
+
+void Plane::setTriHeight(float a)
+{
+	height = posA - a;
+}
+
+void Plane::setTriBase(float b)
+{
+	base = posB + b;
 }
 
 void Plane::m_buildAnimations()

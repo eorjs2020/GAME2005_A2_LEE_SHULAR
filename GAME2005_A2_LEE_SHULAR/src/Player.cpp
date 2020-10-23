@@ -1,28 +1,28 @@
 #include "Player.h"
 #include "TextureManager.h"
+#include "Renderer.h"
+#include "Util.h"
 
 Player::Player(): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 {
-	TextureManager::Instance()->loadSpriteSheet(
-		"../Assets/sprites/atlas.txt",
-		"../Assets/sprites/atlas.png", 
-		"spritesheet");
-
-	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("spritesheet"));
-	
-	// set frame width
-	setWidth(53);
-
-	// set frame height
-	setHeight(58);
-
+	TextureManager::Instance()->load("../Assets/textures/rts_crate_small.png", "box");
+	src.x = 0;
+	src.y = 0;
+	src.w = 512;
+	src.h = 512;
+	dst.x = 0;
+	dst.y = 0;
+	dst.w = 40;
+	dst.h = 40;
+	setWidth(20);
+	setHeight(20);
 	getTransform()->position = glm::vec2(400.0f, 300.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(PLAYER);
+	
 
-	m_buildAnimations();
 }
 
 Player::~Player()
@@ -30,37 +30,20 @@ Player::~Player()
 
 void Player::draw()
 {
-	// alias for x and y
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	// draw the player according to animation state
-	switch(m_currentAnimationState)
-	{
-	case PLAYER_IDLE_RIGHT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("idle"),
-			x, y, 0.12f, 0, 255, true);
-		break;
-	case PLAYER_IDLE_LEFT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("idle"),
-			x, y, 0.12f, 0, 255, true, SDL_FLIP_HORIZONTAL);
-		break;
-	case PLAYER_RUN_RIGHT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("run"),
-			x, y, 0.25f, 0, 255, true);
-		break;
-	case PLAYER_RUN_LEFT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("run"),
-			x, y, 0.25f, 0, 255, true, SDL_FLIP_HORIZONTAL);
-		break;
-	default:
-		break;
-	}
-	
+	TextureManager::Instance()->draw("box", x, y, angle, 255, true, SDL_FLIP_NONE, 40, 40);
+	//SDL_RenderCopyEx(Renderer::Instance()->getRenderer(), m_textureMap[id].get(), &srcRect, &destRect, angle, nullptr, flip);
+	//SDL_RenderCopyExF(Renderer::Instance()->getRenderer(),TextureManager::Instance()->getTexture("box"), &src, &dst, angle , nullptr, SDL_FLIP_NONE);
 }
 
 void Player::update()
 {
+	if (start)
+	{
+
+	}
 }
 
 void Player::clean()
@@ -70,6 +53,11 @@ void Player::clean()
 void Player::setAnimationState(const PlayerAnimationState new_state)
 {
 	m_currentAnimationState = new_state;
+}
+
+void Player::force()
+{
+	m_force = sqrt(Util::magnitude(getRigidBody()->acceleration) * mass);
 }
 
 void Player::m_buildAnimations()

@@ -15,14 +15,32 @@ public:
 	virtual void draw() override;
 	virtual void update() override;
 	virtual void clean() override;
+	void Start() { start += 1; }
+	void setAngle(float angle, float angle2) { this->angle = angle; this->angle2 = angle2; }
+	void PixelPerMeter(float ppm) { dst.h *= ppm; dst.w *= ppm; }
 
 	// setters
 	void setAnimationState(PlayerAnimationState new_state);
-
+	float getMass() { return mass; }
+	void setMass(float a) { mass += a; }
+	void force();
+	float getForce() { return m_force; };
 private:
 	void m_buildAnimations();
-
+	float mass = 12.4, m_force;
 	PlayerAnimationState m_currentAnimationState;
+public:
+
+	SDL_Rect src;
+	SDL_FRect dst;
+protected:
+	bool start = false;
+	float angle2 = 0;
+	float angle = 0;
+	
+	float Gravity = 9.8f;
+	float Friction = 0.42;
+
 };
 
 #endif /* defined (__PLAYER__) */

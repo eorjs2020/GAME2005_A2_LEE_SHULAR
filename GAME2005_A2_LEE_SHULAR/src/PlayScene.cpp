@@ -10,6 +10,7 @@
 PlayScene::PlayScene()
 {
 	PlayScene::start();
+
 }
 
 PlayScene::~PlayScene()
@@ -24,16 +25,21 @@ void PlayScene::draw()
 	}
 	glm::vec4 color(1, 0, 0, 255);
 	drawDisplayList();
-	Util::DrawLine(startPoint, *widthEnd, color);
-	Util::DrawLine(startPoint, *heightEnd, color);
-	Util::DrawLine(*heightEnd, *widthEnd, color);
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 	
 }
 
 void PlayScene::update()
 {
+
 	updateDisplayList();
+
+
+	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
+	m_pPlayer->getTransform()->position = glm::vec2(m_pPlaneSprite->getPositionPC().x + (cos(m_pPlaneSprite->getTriAngle2()) *20 ),
+		m_pPlaneSprite->getPositionPC().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20));
+	std::cout << m_pPlayer->getTransform()->position.x << "   " << m_pPlayer->getTransform()->position.y << std::endl;
+
 }
 
 void PlayScene::clean()
@@ -65,7 +71,8 @@ void PlayScene::handleEvents()
 			{
 				if (m_playerFacingRight)
 				{
-					m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
+					
+					//m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
 				}
 				else
 				{
@@ -86,6 +93,7 @@ void PlayScene::handleEvents()
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 		{
+			m_pPlayer->PixelPerMeter(0.5f);
 			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 			m_playerFacingRight = true;
 		}
@@ -129,95 +137,131 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 	
-	// Plane Sprite
-	m_pPlaneSprite = new Plane();
-	addChild(m_pPlaneSprite);
+	
 
 	// Player Sprite
 	m_pPlayer = new Player();
 	addChild(m_pPlayer);
 	m_playerFacingRight = true;
 
-	// Back Button
-	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
-	m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);
-	m_pBackButton->addEventListener(CLICK, [&]()-> void
-	{
-		m_pBackButton->setActive(false);
-		TheGame::Instance()->changeSceneState(START_SCENE);
-	});
+	// Plane Sprite
+	m_pPlaneSprite = new Plane();
+	addChild(m_pPlaneSprite);
 
-	m_pBackButton->addEventListener(MOUSE_OVER, [&]()->void
-	{
-		m_pBackButton->setAlpha(128);
-	});
+	
+	//// Back Button
+	//m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
+	//m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);
+	//m_pBackButton->addEventListener(CLICK, [&]()-> void
+	//{
+	//	m_pBackButton->setActive(false);
+	//	TheGame::Instance()->changeSceneState(START_SCENE);
+	//});
 
-	m_pBackButton->addEventListener(MOUSE_OUT, [&]()->void
-	{
-		m_pBackButton->setAlpha(255);
-	});
-	addChild(m_pBackButton);
+	//m_pBackButton->addEventListener(MOUSE_OVER, [&]()->void
+	//{
+	//	m_pBackButton->setAlpha(128);
+	//});
 
-	// Next Button
-	m_pNextButton = new Button("../Assets/textures/nextButton.png", "nextButton", NEXT_BUTTON);
-	m_pNextButton->getTransform()->position = glm::vec2(500.0f, 400.0f);
-	m_pNextButton->addEventListener(CLICK, [&]()-> void
-	{
-		m_pNextButton->setActive(false);
-		TheGame::Instance()->changeSceneState(END_SCENE);
-	});
+	//m_pBackButton->addEventListener(MOUSE_OUT, [&]()->void
+	//{
+	//	m_pBackButton->setAlpha(255);
+	//});
+	//addChild(m_pBackButton);
 
-	m_pNextButton->addEventListener(MOUSE_OVER, [&]()->void
-	{
-		m_pNextButton->setAlpha(128);
-	});
+	//// Next Button
+	//m_pNextButton = new Button("../Assets/textures/nextButton.png", "nextButton", NEXT_BUTTON);
+	//m_pNextButton->getTransform()->position = glm::vec2(500.0f, 400.0f);
+	//m_pNextButton->addEventListener(CLICK, [&]()-> void
+	//{
+	//	m_pNextButton->setActive(false);
+	//	TheGame::Instance()->changeSceneState(END_SCENE);
+	//});
 
-	m_pNextButton->addEventListener(MOUSE_OUT, [&]()->void
-	{
-		m_pNextButton->setAlpha(255);
-	});
+	//m_pNextButton->addEventListener(MOUSE_OVER, [&]()->void
+	//{
+	//	m_pNextButton->setAlpha(128);
+	//});
 
-	addChild(m_pNextButton);
+	//m_pNextButton->addEventListener(MOUSE_OUT, [&]()->void
+	//{
+	//	m_pNextButton->setAlpha(255);
+	//});
+
+	//addChild(m_pNextButton);
 
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");
-	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
+	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 10.0f);
 
 	addChild(m_pInstructionsLabel);
 }
 
 void PlayScene::GUI_Function() const
 {
+	double posX = m_pPlayer->getTransform()->position.x,
+		poY = m_pPlayer->getTransform()->position.y,
+		velX = m_pPlayer->getRigidBody()->velocity.x,
+		velY = m_pPlayer->getRigidBody()->velocity.y,
+		magVel = Util::magnitude(m_pPlayer->getRigidBody()->velocity),
+		accX = m_pPlayer->getRigidBody()->acceleration.x,
+		accY = m_pPlayer->getRigidBody()->acceleration.y,
+		magAcc = Util::magnitude(m_pPlayer->getRigidBody()->acceleration),
+		force = m_pPlayer->getForce(),
+		dis = m_pPlaneSprite->getPositionPB().x - m_pPlayer->getTransform()->position.x,
+		ang = m_pPlaneSprite->getTriAngle();
+
 	// Always open with a NewFrame
 	ImGui::NewFrame();
 
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
-	
+
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
-	if(ImGui::Button("My Button"))
+	if (ImGui::Button("Start Simulation"))
 	{
-		std::cout << "My Button Pressed" << std::endl;
+
 	}
 
 	ImGui::Separator();
 
-	static float width =100.0f;
-	if(ImGui::SliderFloat("Ramp Width", &width, 100, 500))
+	static float base = 1.0f;
+	if (ImGui::SliderFloat("Ramp Base", &base, 1, 5))
 	{
-		widthEnd->x = 500 + width;
+		m_pPlaneSprite->setTriBase(base * 50);
 	}
 
-	static float height = 100.0f;
-	if (ImGui::SliderFloat("Ramp Height", &height, 100, 500))
+	static float height = 1.0f;
+	if (ImGui::SliderFloat("Ramp Height", &height, 1, 10))
 	{
-		heightEnd->y = 300 - height;
+		m_pPlaneSprite->setTriHeight(height * 50);
 	}
+	static float mass = 12.4;
+	if (ImGui::SliderFloat("Mass", &mass, 1, 100))
+	{
+			m_pPlayer->setMass(mass);
+	}
+
+	static float coeOfKinFric = 0.42;
+	if (ImGui::SliderFloat("Friction", &coeOfKinFric, 0.01, 0.99))
+	{
+	}
+
+	ImGui::Text("Velocity on x-axis = %.2f m/s", velX);
+	ImGui::Text("Velocity on y-axis = %.2f m/s", -velY);
+	ImGui::Text("Velocity = %.2f m/s", magVel);
+	ImGui::Text("Distance between Ramp and box %.2f m", dis);
+	ImGui::Text("Acceleration on x-axis %.2f m/s", accX);
+	ImGui::Text("Acceleration on y-axis %.2f m/s", accY);
+	ImGui::Text("Acceleration %.2f m/s", magAcc);
+	ImGui::Text("Force %.2f N", force);
+	ImGui::Text("Angel of the triangle %.2f Degree", ang);
+
 	ImGui::End();
-
 	// Don't Remove this
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
+	
 }
