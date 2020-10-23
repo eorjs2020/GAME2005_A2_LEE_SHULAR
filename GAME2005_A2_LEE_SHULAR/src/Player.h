@@ -23,10 +23,11 @@ public:
 	void setAnimationState(PlayerAnimationState new_state);
 	float getMass() { return mass; }
 	void setMass(float a) { mass += a; }
-
+	void force();
+	float getForce() { return m_force; };
 private:
 	void m_buildAnimations();
-	float mass = 12.4;
+	float mass = 12.4, m_force;
 	PlayerAnimationState m_currentAnimationState;
 public:
 	float angle2 = 0;

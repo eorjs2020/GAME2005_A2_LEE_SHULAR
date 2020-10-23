@@ -24,7 +24,9 @@ public:
 	float getTriHypotenuse();
 	void setTriHeight(float a);
 	void setTriBase(float b);
-	glm::vec2 getPositionPA() { return pointC; };
+	glm::vec2 getPositionPC() { return pointC; };
+	glm::vec2 getPositionPB() { return pointB; };
+	glm::vec2 getPositionPA() { return pointA; };
 	
 
 private:

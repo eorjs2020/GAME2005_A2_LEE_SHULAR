@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "TextureManager.h"
 #include "Renderer.h"
+#include "Util.h"
 
 Player::Player(): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 {
@@ -44,6 +45,11 @@ void Player::clean()
 void Player::setAnimationState(const PlayerAnimationState new_state)
 {
 	m_currentAnimationState = new_state;
+}
+
+void Player::force()
+{
+	m_force = sqrt(Util::magnitude(getRigidBody()->acceleration) * mass);
 }
 
 void Player::m_buildAnimations()

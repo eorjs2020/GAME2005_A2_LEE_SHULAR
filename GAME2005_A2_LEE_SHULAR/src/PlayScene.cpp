@@ -37,7 +37,7 @@ void PlayScene::update()
 
 	
 	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
-	m_pPlayer->setDstXY(m_pPlaneSprite->getPositionPA());
+	m_pPlayer->setDstXY(m_pPlaneSprite->getPositionPC());
 
 	
 	std::cout << cos(30 *  3.14159265359f/ 180) << std::endl;
@@ -197,16 +197,17 @@ void PlayScene::start()
 
 void PlayScene::GUI_Function() const
 {
-	double posX = 0,
-		poY = 0,
-		velX =0 ,
-		velY = 0,
-		magVel = 0,
-		accX = 0,
-		accY = 0,
-		magAcc = 0,
-		force = 0,
-		dis = 0;
+	double posX = m_pPlayer->getTransform()->position.x,
+		poY = m_pPlayer->getTransform()->position.y,
+		velX = m_pPlayer->getRigidBody()->velocity.x,
+		velY = m_pPlayer->getRigidBody()->velocity.y,
+		magVel = Util::magnitude(m_pPlayer->getRigidBody()->velocity),
+		accX = m_pPlayer->getRigidBody()->acceleration.x,
+		accY = m_pPlayer->getRigidBody()->acceleration.y,
+		magAcc = Util::magnitude(m_pPlayer->getRigidBody()->acceleration),
+		force = m_pPlayer->getForce(),
+		dis = m_pPlaneSprite->getPositionPB().x - m_pPlayer->getTransform()->position.x,
+		ang = m_pPlaneSprite->getTriAngle();
 
 	// Always open with a NewFrame
 	ImGui::NewFrame();
@@ -255,7 +256,7 @@ void PlayScene::GUI_Function() const
 	ImGui::Text("Acceleration on y-axis %.2f m/s²", accY);
 	ImGui::Text("Acceleration %.2f m/s?", magAcc);
 	ImGui::Text("Force %.2f N", force);
-	
+	ImGui::Text("Angel of the triangle %.2f Degree", ang);
 
 
 	ImGui::End();
