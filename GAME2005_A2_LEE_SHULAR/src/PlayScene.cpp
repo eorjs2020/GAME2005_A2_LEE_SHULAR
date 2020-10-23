@@ -36,8 +36,8 @@ void PlayScene::update()
 
 
 	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
-	m_pPlayer->getTransform()->position = glm::vec2(m_pPlaneSprite->getPositionPA().x + (cos(m_pPlaneSprite->getTriAngle2()) *20 ),
-		m_pPlaneSprite->getPositionPA().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20));
+	m_pPlayer->getTransform()->position = glm::vec2(m_pPlaneSprite->getPositionPC().x + (cos(m_pPlaneSprite->getTriAngle2()) *20 ),
+		m_pPlaneSprite->getPositionPC().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20));
 	std::cout << m_pPlayer->getTransform()->position.x << "   " << m_pPlayer->getTransform()->position.y << std::endl;
 
 }
@@ -199,6 +199,18 @@ void PlayScene::start()
 
 void PlayScene::GUI_Function() const
 {
+	double posX = m_pPlayer->getTransform()->position.x,
+		poY = m_pPlayer->getTransform()->position.y,
+		velX = m_pPlayer->getRigidBody()->velocity.x,
+		velY = m_pPlayer->getRigidBody()->velocity.y,
+		magVel = Util::magnitude(m_pPlayer->getRigidBody()->velocity),
+		accX = m_pPlayer->getRigidBody()->acceleration.x,
+		accY = m_pPlayer->getRigidBody()->acceleration.y,
+		magAcc = Util::magnitude(m_pPlayer->getRigidBody()->acceleration),
+		force = m_pPlayer->getForce(),
+		dis = m_pPlaneSprite->getPositionPB().x - m_pPlayer->getTransform()->position.x,
+		ang = m_pPlaneSprite->getTriAngle();
+
 	// Always open with a NewFrame
 	ImGui::NewFrame();
 
@@ -207,9 +219,9 @@ void PlayScene::GUI_Function() const
 	
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
-	if(ImGui::Button("My Button"))
+	if(ImGui::Button("Start Simulation"))
 	{
-		std::cout << "My Button Pressed" << std::endl;
+	
 	}
 
 	ImGui::Separator();
@@ -218,9 +230,6 @@ void PlayScene::GUI_Function() const
 	if(ImGui::SliderFloat("Ramp Base", &base, 1, 5))
 	{
 		m_pPlaneSprite->setTriBase(base * 50);
-
-			
-	
 	}
 
 	static float height = 1.0f;
@@ -228,9 +237,29 @@ void PlayScene::GUI_Function() const
 	{
 		m_pPlaneSprite->setTriHeight(height* 50);
 	
-	
-	
+	static float mass = 12.4;
+	if (ImGui::SliderFloat("Mass", &mass, 1, 100))
+	{
+		m_pPlayer->setMass(mass);
 	}
+
+	static float coeOfKinFric = 0.42;
+	if (ImGui::SliderFloat("Ramp Height", &coeOfKinFric, 0.01, 0.99))
+	{
+
+	}
+
+	ImGui::Text("Velocity on x-axis = %.2f m/s", velX);
+	ImGui::Text("Velocity on y-axis = %.2f m/s", -velY);
+	ImGui::Text("Velocity = %.2f m/s", magVel);
+	ImGui::Text("Distance between Ramp and box %.2f m", dis);
+	ImGui::Text("Acceleration on x-axis %.2f m/s�", accX);
+	ImGui::Text("Acceleration on y-axis %.2f m/s�", accY);
+	ImGui::Text("Acceleration %.2f m/s?", magAcc);
+	ImGui::Text("Force %.2f N", force);
+	ImGui::Text("Angel of the triangle %.2f Degree", ang);
+
+
 	ImGui::End();
 
 	// Don't Remove this
