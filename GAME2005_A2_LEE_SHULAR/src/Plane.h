@@ -20,6 +20,7 @@ public:
 	float getTriHeight();
 	float getTriBase();
 	float getTriAngle();
+	float getTriAngle2();
 	float getTriHypotenuse();
 	void setTriHeight(float a);
 	void setTriBase(float b);
@@ -28,7 +29,7 @@ public:
 
 private:
 	void m_buildAnimations();
-	float angle, hypotenuse;
+	float angle, hypotenuse, angle2;
 	glm::vec2 pointA{ 0.0f, 0.0f }, pointB{ 0.0f, 0.0f }, pointC{ 0.0f, 0.0f };
 	glm::vec4 color{ 0.0f, 0.0f, 1.0f, 1.0f };
 	//Used for where the orignal position of base and height points

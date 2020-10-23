@@ -36,7 +36,7 @@ void PlayScene::update()
 	updateDisplayList();
 
 	
-	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f);
+	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
 	m_pPlayer->setDstXY(m_pPlaneSprite->getPositionPA());
 
 	
@@ -137,15 +137,16 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 	
-	// Plane Sprite
-	m_pPlaneSprite = new Plane();
-	addChild(m_pPlaneSprite);
+	
 
 	// Player Sprite
 	m_pPlayer = new Player();
 	addChild(m_pPlayer);
 	m_playerFacingRight = true;
-	
+
+	// Plane Sprite
+	m_pPlaneSprite = new Plane();
+	addChild(m_pPlaneSprite);
 	//// Back Button
 	//m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
 	//m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);

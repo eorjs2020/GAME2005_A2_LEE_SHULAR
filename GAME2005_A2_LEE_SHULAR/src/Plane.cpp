@@ -55,7 +55,7 @@ void Plane::update()
 	hypotenuse = Util::distance(pointB, pointC);
 	angle = asin(Util::distance(pointA, pointC) / hypotenuse);
 	angle = atan(Util::distance(pointA, pointC) / Util::distance(pointA, pointB));
-	
+	angle2 = asin(Util::distance(pointA, pointB) / hypotenuse);
 }
 
 
@@ -76,6 +76,11 @@ float Plane::getTriBase()
 float Plane::getTriAngle()
 {
 	return angle;
+}
+
+float Plane::getTriAngle2()
+{
+	return angle2;
 }
 
 float Plane::getTriHypotenuse()

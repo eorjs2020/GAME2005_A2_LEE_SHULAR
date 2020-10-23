@@ -15,9 +15,9 @@ public:
 	virtual void draw() override;
 	virtual void update() override;
 	virtual void clean() override;
-	void setAngle(float angle) { this->angle = angle; }
-	void setDstXY(glm::vec2 position) { dst.x = position.x + (float)(cos(angle * 3.14159265359f / 180) *20); 
-	dst.y = position.y - (float)(sin(angle * 3.14159265359f / 180) * 20);  }
+	void setAngle(float angle, float angle2) { this->angle = angle; this->angle2 = angle2; }
+	void setDstXY(glm::vec2 position) { dst.x = position.x + (float)(cos(angle2)*20); 
+	dst.y = position.y - (float)(sin(angle2) * 20);  }
 
 	// setters
 	void setAnimationState(PlayerAnimationState new_state);
@@ -27,6 +27,7 @@ private:
 	
 	PlayerAnimationState m_currentAnimationState;
 public:
+	float angle2 = 0;
 	float angle = 0;
 	SDL_Rect src;
 	SDL_FRect dst;
