@@ -197,6 +197,17 @@ void PlayScene::start()
 
 void PlayScene::GUI_Function() const
 {
+	double posX = 0,
+		poY = 0,
+		velX =0 ,
+		velY = 0,
+		magVel = 0,
+		accX = 0,
+		accY = 0,
+		magAcc = 0,
+		force = 0,
+		dis = 0;
+
 	// Always open with a NewFrame
 	ImGui::NewFrame();
 
@@ -236,7 +247,15 @@ void PlayScene::GUI_Function() const
 
 	}
 
-
+	ImGui::Text("Velocity on x-axis = %.2f m/s", velX);
+	ImGui::Text("Velocity on y-axis = %.2f m/s", -velY);
+	ImGui::Text("Velocity = %.2f m/s", magVel);
+	ImGui::Text("Distance between Ramp and box %.2f m", dis);
+	ImGui::Text("Acceleration on x-axis %.2f m/s²", accX);
+	ImGui::Text("Acceleration on y-axis %.2f m/s²", accY);
+	ImGui::Text("Acceleration %.2f m/s?", magAcc);
+	ImGui::Text("Force %.2f N", force);
+	
 
 
 	ImGui::End();
