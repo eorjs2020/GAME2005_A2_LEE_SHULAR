@@ -216,18 +216,18 @@ void PlayScene::GUI_Function() const
 
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
-	
+
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
-	if(ImGui::Button("Start Simulation"))
+	if (ImGui::Button("Start Simulation"))
 	{
-	
+
 	}
 
 	ImGui::Separator();
 
-	static float base =1.0f;
-	if(ImGui::SliderFloat("Ramp Base", &base, 1, 5))
+	static float base = 1.0f;
+	if (ImGui::SliderFloat("Ramp Base", &base, 1, 5))
 	{
 		m_pPlaneSprite->setTriBase(base * 50);
 	}
@@ -235,35 +235,33 @@ void PlayScene::GUI_Function() const
 	static float height = 1.0f;
 	if (ImGui::SliderFloat("Ramp Height", &height, 1, 10))
 	{
-		m_pPlaneSprite->setTriHeight(height* 50);
-	
+		m_pPlaneSprite->setTriHeight(height * 50);
+	}
 	static float mass = 12.4;
 	if (ImGui::SliderFloat("Mass", &mass, 1, 100))
 	{
-		m_pPlayer->setMass(mass);
+			m_pPlayer->setMass(mass);
 	}
 
 	static float coeOfKinFric = 0.42;
-	if (ImGui::SliderFloat("Ramp Height", &coeOfKinFric, 0.01, 0.99))
+	if (ImGui::SliderFloat("Friction", &coeOfKinFric, 0.01, 0.99))
 	{
-
 	}
 
 	ImGui::Text("Velocity on x-axis = %.2f m/s", velX);
 	ImGui::Text("Velocity on y-axis = %.2f m/s", -velY);
 	ImGui::Text("Velocity = %.2f m/s", magVel);
 	ImGui::Text("Distance between Ramp and box %.2f m", dis);
-	ImGui::Text("Acceleration on x-axis %.2f m/s�", accX);
-	ImGui::Text("Acceleration on y-axis %.2f m/s�", accY);
-	ImGui::Text("Acceleration %.2f m/s?", magAcc);
+	ImGui::Text("Acceleration on x-axis %.2f m/s", accX);
+	ImGui::Text("Acceleration on y-axis %.2f m/s", accY);
+	ImGui::Text("Acceleration %.2f m/s", magAcc);
 	ImGui::Text("Force %.2f N", force);
 	ImGui::Text("Angel of the triangle %.2f Degree", ang);
 
-
 	ImGui::End();
-
 	// Don't Remove this
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
+	
 }

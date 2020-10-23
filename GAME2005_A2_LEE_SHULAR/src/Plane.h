@@ -35,7 +35,7 @@ private:
 	glm::vec2 pointA{ 0.0f, 0.0f }, pointB{ 0.0f, 0.0f }, pointC{ 0.0f, 0.0f };
 	glm::vec4 color{ 0.0f, 0.0f, 1.0f, 1.0f };
 	//Used for where the orignal position of base and height points
-	float height = 350, base = 200;
+	float height = Config::SCREEN_HEIGHT - 100, base = 100;
 	//Used for where the Triangle is positioned on screen 
 	float posA = Config::SCREEN_HEIGHT - 50, posB = 50.0f;
 };
