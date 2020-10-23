@@ -205,9 +205,9 @@ void PlayScene::GUI_Function() const
 	
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
-	if(ImGui::Button("My Button"))
+	if(ImGui::Button("Start Simulation"))
 	{
-		std::cout << "My Button Pressed" << std::endl;
+	
 	}
 
 	ImGui::Separator();
@@ -216,19 +216,29 @@ void PlayScene::GUI_Function() const
 	if(ImGui::SliderFloat("Ramp Base", &base, 50, 300))
 	{
 		m_pPlaneSprite->setTriBase(base);
-	
-		
-	
 	}
 
 	static float height = 100.0f;
 	if (ImGui::SliderFloat("Ramp Height", &height, 50, 300))
 	{
 		m_pPlaneSprite->setTriHeight(height);
-	
-		
-	
 	}
+	
+	static float mass = 12.4;
+	if (ImGui::SliderFloat("Ramp Height", &mass, 1, 100))
+	{
+		m_pPlayer->setMass(mass);
+	}
+
+	static float coeOfKinFric = 0.42;
+	if (ImGui::SliderFloat("Ramp Height", &coeOfKinFric, 0.01, 0.99))
+	{
+
+	}
+
+
+
+
 	ImGui::End();
 
 	// Don't Remove this

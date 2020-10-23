@@ -21,16 +21,20 @@ public:
 
 	// setters
 	void setAnimationState(PlayerAnimationState new_state);
+	float getMass() { return mass; }
+	void setMass(float a) { mass += a; }
 
 private:
 	void m_buildAnimations();
-	
+	float mass = 12.4;
 	PlayerAnimationState m_currentAnimationState;
 public:
 	float angle2 = 0;
 	float angle = 0;
 	SDL_Rect src;
 	SDL_FRect dst;
+	
+
 };
 
 #endif /* defined (__PLAYER__) */
