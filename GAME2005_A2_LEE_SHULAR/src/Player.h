@@ -21,10 +21,22 @@ public:
 
 	// setters
 	void setAnimationState(PlayerAnimationState new_state);
-	float getMass() { return mass; }
 	void setMass(float a) { mass += a; }
-	void force();
+	void setFriction(float a) { Friction += a; }
+	void setGravity(float a) { Gravity += a; }
+
+
+	//getters 
 	float getForce() { return m_force; };
+	float getMass() { return mass; }
+	float getFriction() { return Friction; }
+	float getGravity() { return Gravity; }
+
+	//calculation
+	void calForce();
+	
+	
+
 private:
 	void m_buildAnimations();
 	float mass = 12.4, m_force;

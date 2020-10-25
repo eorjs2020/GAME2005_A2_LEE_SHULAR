@@ -42,7 +42,7 @@ void Player::update()
 {
 	if (start)
 	{
-
+		this->calForce();
 	}
 }
 
@@ -55,7 +55,7 @@ void Player::setAnimationState(const PlayerAnimationState new_state)
 	m_currentAnimationState = new_state;
 }
 
-void Player::force()
+void Player::calForce()
 {
 	m_force = sqrt(Util::magnitude(getRigidBody()->acceleration) * mass);
 }

@@ -208,9 +208,8 @@ void PlayScene::GUI_Function() const
 		accY = m_pPlayer->getRigidBody()->acceleration.y,
 		magAcc = Util::magnitude(m_pPlayer->getRigidBody()->acceleration),
 		force = m_pPlayer->getForce(),
-		dis = m_pPlaneSprite->getPositionPB().x - m_pPlayer->getTransform()->position.x,
-		ang = m_pPlaneSprite->getTriAngle();
-
+		ang = (m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f);
+	float dis = (m_pPlaneSprite->getPositionPB().x - m_pPlayer->getTransform()->position.x) / 50;
 	// Always open with a NewFrame
 	ImGui::NewFrame();
 
@@ -240,23 +239,24 @@ void PlayScene::GUI_Function() const
 	static float mass = 12.4;
 	if (ImGui::SliderFloat("Mass", &mass, 1, 100))
 	{
-			m_pPlayer->setMass(mass);
+		m_pPlayer->setMass(mass);
 	}
 
 	static float coeOfKinFric = 0.42;
 	if (ImGui::SliderFloat("Friction", &coeOfKinFric, 0.01, 0.99))
 	{
+		m_pPlayer->setFriction(coeOfKinFric);
 	}
 
 	ImGui::Text("Velocity on x-axis = %.2f m/s", velX);
 	ImGui::Text("Velocity on y-axis = %.2f m/s", -velY);
 	ImGui::Text("Velocity = %.2f m/s", magVel);
-	ImGui::Text("Distance between Ramp and box %.2f m", dis);
-	ImGui::Text("Acceleration on x-axis %.2f m/s", accX);
-	ImGui::Text("Acceleration on y-axis %.2f m/s", accY);
-	ImGui::Text("Acceleration %.2f m/s", magAcc);
+	ImGui::Text("The horizontal distance between Bottem right corner and the box %.2f m", dis);
+	ImGui::Text("Acceleration on x-axis %.2f m/s^2", accX);
+	ImGui::Text("Acceleration on y-axis %.2f m/s^2", accY);
+	ImGui::Text("Acceleration %.2f m/s^2", magAcc);
 	ImGui::Text("Force %.2f N", force);
-	ImGui::Text("Angel of the triangle %.2f Degree", ang);
+	ImGui::Text("Angel of the triangle %.2f Degrees", ang);
 
 	ImGui::End();
 	// Don't Remove this
