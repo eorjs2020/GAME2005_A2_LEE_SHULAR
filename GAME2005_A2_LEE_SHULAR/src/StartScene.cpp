@@ -14,6 +14,7 @@ StartScene::~StartScene()
 
 void StartScene::draw()
 {
+	TextureManager::Instance()->draw("background", 400, 300, 0, 255, true);
 	drawDisplayList();
 }
 
@@ -45,19 +46,22 @@ void StartScene::handleEvents()
 
 void StartScene::start()
 {
-	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_pStartLabel = new Label("START SCENE", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
+	TextureManager::Instance()->load("../Assets/textures/field.png", "background");
+
+
+	const SDL_Color blue = { 255, 0, 0, 255 };
+	m_pStartLabel = new Label("Daekoen Lee", "Consolas", 40, blue, glm::vec2(400.0f, 40.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 
-	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
+	m_pInstructionsLabel = new Label("Michael Shular", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
 
-	m_pShip = new Ship();
+	/*m_pShip = new Ship();
 	m_pShip->getTransform()->position = glm::vec2(400.0f, 300.0f); 
-	addChild(m_pShip); 
+	addChild(m_pShip); */
 
 	// Start Button
 	m_pStartButton = new Button();

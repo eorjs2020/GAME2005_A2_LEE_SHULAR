@@ -18,7 +18,7 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
-	
+	TextureManager::Instance()->draw("background", 400, 300, 0, 255, true);
 	if(EventManager::Instance().isIMGUIActive())
 	{
 		GUI_Function();
@@ -131,6 +131,8 @@ void PlayScene::handleEvents()
 
 void PlayScene::start()
 {
+	TextureManager::Instance()->load("../Assets/textures/field.png", "background");
+
 	// triangle points
 	startPoint = glm::vec2(500.0f, 300.0f);
 	widthEnd = new glm::vec2(600.0f, 300.0f);
