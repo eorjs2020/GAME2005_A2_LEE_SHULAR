@@ -42,7 +42,8 @@ void Player::update()
 {
 	if (start)
 	{
-
+		this->calForce();
+		Move();
 	}
 }
 
@@ -50,12 +51,61 @@ void Player::clean()
 {
 }
 
+void Player::Move()
+{
+	float deltaTime = 1.0f / 60.0f;
+	float pixelPerMeter = 1.0f;
+	
+	if (getTransform()->position.y >= (Config::SCREEN_HEIGHT - 70))
+	{
+		if (teleport)
+		{
+			angle = 0;
+			initialVel = glm::vec2(getRigidBody()->velocity.x, 0);
+			getRigidBody()->velocity = initialVel;
+			getRigidBody()->acceleration = glm::vec2(-(Gravity * Friction), 0);
+			teleport = false;
+		}
+		if (getRigidBody()->velocity.x > 0)
+		{
+			getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
+			getTransform()->position += getRigidBody()->velocity * deltaTime * pixelPerMeter;
+		}
+		else
+		{
+			getRigidBody()->velocity.x = 0;
+			
+		}
+	
+	}
+	else
+	{
+		getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
+		getTransform()->position += getRigidBody()->velocity * deltaTime * pixelPerMeter;
+	}
+	
+}
+
+void Player::MoveStart()
+{
+	getRigidBody()->acceleration += glm::vec2(sin(angle2) * Gravity, cos(angle2) * Gravity);
+	
+}
+
+void Player::Reset()
+{
+	getRigidBody()->velocity = getRigidBody()->acceleration = glm::vec2(0, 0);
+	start = false;
+	teleport = true;
+
+}
+
 void Player::setAnimationState(const PlayerAnimationState new_state)
 {
 	m_currentAnimationState = new_state;
 }
 
-void Player::force()
+void Player::calForce()
 {
 	m_force = sqrt(Util::magnitude(getRigidBody()->acceleration) * mass);
 }

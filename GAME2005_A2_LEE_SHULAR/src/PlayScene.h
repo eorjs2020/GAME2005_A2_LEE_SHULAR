@@ -35,7 +35,7 @@ private:
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;
 	bool m_playerFacingRight;
-
+	bool Start = false;
 	// UI Items
 	Button* m_pBackButton;
 	Button* m_pNextButton;

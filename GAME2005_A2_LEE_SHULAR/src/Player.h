@@ -17,24 +17,40 @@ public:
 	virtual void clean() override;
 	void Start() { start += 1; }
 	void setAngle(float angle, float angle2) { this->angle = angle; this->angle2 = angle2; }
-	void PixelPerMeter(float ppm) { dst.h *= ppm; dst.w *= ppm; }
+	void Move();
+	void MoveStart();
+	void Reset();
 
 	// setters
 	void setAnimationState(PlayerAnimationState new_state);
-	float getMass() { return mass; }
-	void setMass(float a) { mass += a; }
-	void force();
+	void setMass(float a) { mass = a; }
+	void setFriction(float a) { Friction = a; }
+	void setGravity(float a) { Gravity = a; }
+
+
+	//getters 
 	float getForce() { return m_force; };
+	float getMass() { return mass; }
+	float getFriction() { return Friction; }
+	float getGravity() { return Gravity; }
+
+	//calculation
+	void calForce();
+	
+	
+
 private:
 	void m_buildAnimations();
 	float mass = 12.4, m_force;
 	PlayerAnimationState m_currentAnimationState;
 public:
-
+	bool start = false;
+	bool teleport = true;
 	SDL_Rect src;
 	SDL_FRect dst;
+	glm::vec2 initialVel;
 protected:
-	bool start = false;
+	
 	float angle2 = 0;
 	float angle = 0;
 	
