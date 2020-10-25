@@ -61,7 +61,7 @@ void Player::Move()
 		if (teleport)
 		{
 			angle = 0;
-			initialVel = glm::vec2(getRigidBody()->velocity.x, 0);
+			initialVel = glm::vec2(Util::magnitude(getRigidBody()->velocity),0);
 			getRigidBody()->velocity = initialVel;
 			getRigidBody()->acceleration = glm::vec2(-(Gravity * Friction), 0);
 			teleport = false;
