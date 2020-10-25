@@ -31,14 +31,16 @@ void PlayScene::draw()
 
 void PlayScene::update()
 {
-
+	Start = m_pPlayer->start;
 	updateDisplayList();
 
-
-	m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
-	m_pPlayer->getTransform()->position = glm::vec2(m_pPlaneSprite->getPositionPC().x + (cos(m_pPlaneSprite->getTriAngle2()) *20 ),
-		m_pPlaneSprite->getPositionPC().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20));
-	std::cout << m_pPlayer->getTransform()->position.x << "   " << m_pPlayer->getTransform()->position.y << std::endl;
+	if (!Start)
+	{
+		m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
+		m_pPlayer->getTransform()->position = glm::vec2(m_pPlaneSprite->getPositionPC().x + (cos(m_pPlaneSprite->getTriAngle2()) * 20),
+			m_pPlaneSprite->getPositionPC().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20));
+	}
+	
 
 }
 
@@ -93,7 +95,7 @@ void PlayScene::handleEvents()
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 		{
-			m_pPlayer->PixelPerMeter(0.5f);
+			
 			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 			m_playerFacingRight = true;
 		}
@@ -217,12 +219,21 @@ void PlayScene::GUI_Function() const
 	//ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
-
-	if (ImGui::Button("Start Simulation"))
+	if (!Start)
 	{
-
+		if (ImGui::Button("Start Simulation"))
+		{
+			m_pPlayer->MoveStart();
+			m_pPlayer->start = true;
+		}
 	}
-
+	else
+	{
+		if (ImGui::Button("Reset"))
+		{
+			m_pPlayer->Reset();
+		}
+	}
 	ImGui::Separator();
 
 	static float base = 1.0f;
@@ -249,7 +260,7 @@ void PlayScene::GUI_Function() const
 	}
 
 	ImGui::Text("Velocity on x-axis = %.2f m/s", velX);
-	ImGui::Text("Velocity on y-axis = %.2f m/s", -velY);
+	ImGui::Text("Velocity on y-axis = %.2f m/s", velY);
 	ImGui::Text("Velocity = %.2f m/s", magVel);
 	ImGui::Text("The horizontal distance between Bottem right corner and the box %.2f m", dis);
 	ImGui::Text("Acceleration on x-axis %.2f m/s^2", accX);
