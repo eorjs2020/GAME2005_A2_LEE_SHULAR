@@ -45,6 +45,10 @@ void Player::update()
 		this->calForce();
 		Move();
 	}
+	else
+	{
+		original = getTransform()->position;
+	}
 }
 
 void Player::clean()
@@ -53,18 +57,20 @@ void Player::clean()
 
 void Player::Move()
 {
-	float deltaTime = 1.0f / 60.0f;
-	float pixelPerMeter = 1.0f;
+	float deltaTime = 1.0f;
+	float pixelPerMeter = 0.02f;
 	
-	if (getTransform()->position.y >= (Config::SCREEN_HEIGHT - 70))
+	if (getTransform()->position.y > (Config::SCREEN_HEIGHT - 70))
 	{
 		if (teleport)
 		{
 			angle = 0;
+
 			initialVel = glm::vec2(Util::magnitude(getRigidBody()->velocity),0);
 			getRigidBody()->velocity = initialVel;
 			getRigidBody()->acceleration = glm::vec2(-(Gravity * Friction), 0);
 			teleport = false;
+			
 		}
 		if (getRigidBody()->velocity.x > 0)
 		{
@@ -76,20 +82,25 @@ void Player::Move()
 			getRigidBody()->velocity.x = 0;
 			
 		}
+		
 	
 	}
 	else
-	{
+	{	
 		getRigidBody()->velocity += getRigidBody()->acceleration * deltaTime;
 		getTransform()->position += getRigidBody()->velocity * deltaTime * pixelPerMeter;
+		//std::cout << Util::distance(getTransform()->position, original) / 50 << std::endl;
+		std::cout << Util::magnitude(getRigidBody()->velocity)/ 50 << std::endl;				
 	}
 	
 }
 
 void Player::MoveStart()
 {
-	getRigidBody()->acceleration += glm::vec2(sin(angle2) * Gravity, cos(angle2) * Gravity);
+	getRigidBody()->acceleration = glm::vec2(sin(angle2) * Gravity , cos(angle2) * Gravity);
 	
+	
+		
 }
 
 void Player::Reset()

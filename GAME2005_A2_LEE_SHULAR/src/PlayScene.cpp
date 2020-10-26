@@ -31,14 +31,15 @@ void PlayScene::draw()
 
 void PlayScene::update()
 {
-	Start = m_pPlayer->start;
 	updateDisplayList();
+	Start = m_pPlayer->start;
+	
 
 	if (!Start)
 	{
 		m_pPlayer->setAngle(m_pPlaneSprite->getTriAngle() * 180 / 3.14159265359f, m_pPlaneSprite->getTriAngle2());
 		m_pPlayer->getTransform()->position = glm::vec2(m_pPlaneSprite->getPositionPC().x + (cos(m_pPlaneSprite->getTriAngle2()) * 20),
-			m_pPlaneSprite->getPositionPC().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20));
+			m_pPlaneSprite->getPositionPC().y - (sin(m_pPlaneSprite->getTriAngle2()) * 20) );
 	}
 	
 
@@ -207,7 +208,7 @@ void PlayScene::GUI_Function() const
 		poY = m_pPlayer->getTransform()->position.y,
 		velX = m_pPlayer->getRigidBody()->velocity.x,
 		velY = m_pPlayer->getRigidBody()->velocity.y,
-		magVel = Util::magnitude(m_pPlayer->getRigidBody()->velocity),
+		magVel = Util::magnitude(m_pPlayer->getRigidBody()->velocity) / 50,
 		accX = m_pPlayer->getRigidBody()->acceleration.x,
 		accY = m_pPlayer->getRigidBody()->acceleration.y,
 		magAcc = Util::magnitude(m_pPlayer->getRigidBody()->acceleration),

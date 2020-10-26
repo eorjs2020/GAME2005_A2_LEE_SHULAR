@@ -50,10 +50,10 @@ public:
 	SDL_FRect dst;
 	glm::vec2 initialVel;
 protected:
-	
+	glm::vec2 original;
 	float angle2 = 0;
 	float angle = 0;
-	
+	int a = 0;
 	float Gravity = 9.8f;
 	float Friction = 0.42;
 
